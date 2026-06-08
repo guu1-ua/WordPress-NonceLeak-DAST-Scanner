@@ -1,0 +1,12 @@
+#  NonceLeak Scanner - Dependencias del Proyecto
+
+# Runtime
+aiohttp==3.9.5          # Motor de peticiones HTTP asíncronas
+beautifulsoup4==4.12.3  # Parser HTML/DOM
+lxml==5.2.2             # Backend rápido para BeautifulSoup4
+colorama==0.4.6         # Colores en la terminal para todas las plataformas
+
+# Testing 
+pytest==8.2.0           # Framework de pruebas
+pytest-asyncio==0.23.7  # Soporte async/await en pytest
+aioresponses==0.7.6     # Mock de peticiones aiohttp en tests
