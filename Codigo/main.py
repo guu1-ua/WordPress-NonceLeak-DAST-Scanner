@@ -167,9 +167,7 @@ def _emit_report(report: ScannerReport, fmt: str) -> None:
     else:  # stdout
         d = report.to_dict()
         print("\n" + Fore.CYAN + "=" * 70)
-        print(
-            Fore.CYAN + Style.BRIGHT + "  NONCE LEAK SCANNER - RESULTADOS DEL ESCANEO"
-        )
+        print(Fore.CYAN + Style.BRIGHT + "  NONCE LEAK SCANNER - RESULTADOS DEL ESCANEO")
         print(Fore.CYAN + "=" * 70)
         print(f"  Objetivo : {Style.BRIGHT}{d['meta']['target_url']}")
         print(f"  Duración : {d['meta']['scan_duration_seconds']}s")
@@ -178,11 +176,10 @@ def _emit_report(report: ScannerReport, fmt: str) -> None:
         print(f"  Hallazgos: {total_color}{total_findings}")
         print()
 
-        if not report.findings:
-            print(
-                f"  {Fore.GREEN + Style.BRIGHT}[OK] No se detectaron nonces expuestos."
-            )
-        else:
+        if not report.findings:  
+            print(f"  {Fore.GREEN + Style.BRIGHT}[OK] No se detectaron nonces expuestos.")
+        
+        else:   
             by_type = d["summary"]["by_type"]
             print(f"  {Style.BRIGHT}Resumen por tipo:")
             for t, count in by_type.items():
@@ -203,20 +200,36 @@ def _emit_report(report: ScannerReport, fmt: str) -> None:
                     sev_color = Fore.BLUE + Style.BRIGHT
 
                 sev_tag = f"[{f['severity'].upper()}]"
-                print(
-                    f"\n  {Fore.YELLOW}[{i}]{Fore.RESET} {sev_color}{sev_tag} {Fore.WHITE + Style.BRIGHT}{f['leak_type'].upper()}"
-                )
+                print(f"\n  {Fore.YELLOW}[{i}]{Fore.RESET} {sev_color}{sev_tag} {Fore.WHITE + Style.BRIGHT}{f['leak_type'].upper()}")
                 print(f"      URL       : {Fore.CYAN}{f['url']}")
-                print(
-                    f"      Nonce     : {Fore.GREEN + Style.BRIGHT}{f['nonce_value']}"
-                )
+                print(f"      Nonce     : {Fore.GREEN + Style.BRIGHT}{f['nonce_value']}")
                 print(f"      Contexto  : {f['context']}")
                 if f["evidence"]:
                     # Clean newlines from evidence snippet for neat console display
-                    evidence_snippet = (
-                        f["evidence"][:80].replace("\n", " ").replace("\r", "")
-                    )
+                    evidence_snippet = (f["evidence"][:80].replace("\n", " ").replace("\r", ""))
                     print(f"      Evidencia : {Style.DIM}{evidence_snippet}")
+            
+            # Mostrar guía interactiva de validación
+            print()
+            print(Fore.YELLOW + "  " + "=" * 66)
+            print(Fore.YELLOW + Style.BRIGHT + 
+                  "   GUÍA DE VALIDACIÓN (Vulnerabilidad vs. Falso Positivo)")
+            print(Fore.YELLOW + "  " + "=" * 66)
+            print("  Un nonce expuesto no siempre es explotable. Siga estos pasos para")
+            print("  determinar si el hallazgo representa una vulnerabilidad real:")
+            print()
+            print("  1. Identifique la acción de WordPress asociada al nonce detectado.")
+            print("  2. Capture e intercepte la petición (AJAX o REST) que usa el nonce.")
+            print("  3. Replique la petición HTTP (vía curl/Postman) eliminando las cookies")
+            print("     de sesión para simular un usuario anónimo.")
+            print("  4. Evalúe la naturaleza de la acción y la respuesta del servidor:")
+            print(f"     - {Fore.RED}{Style.BRIGHT}Vulnerabilidad Real (Bypass):{Fore.RESET} La acción es de tipo administrativa/sensible")
+            print("       (ej. borrar posts, editar perfiles) y el servidor la ejecuta")
+            print("       con éxito (200 OK, success:true) sin requerir autenticación.")
+            print(f"     - {Fore.GREEN}{Style.BRIGHT}Exposición Segura (Falso Positivo):{Fore.RESET} La acción es administrativa")
+            print("       pero el servidor valida privilegios y la rechaza (403/401),")
+            print("       O BIEN la acción es pública por diseño (ej. cargar imágenes")
+            print("       de galería o paginar posts públicos).")
 
         print("\n" + Fore.CYAN + "=" * 70 + "\n")
 
