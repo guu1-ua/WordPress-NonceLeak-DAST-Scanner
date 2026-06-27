@@ -213,7 +213,7 @@ def _emit_report(report: ScannerReport, fmt: str) -> None:
             print()
             print(Fore.YELLOW + "  " + "=" * 66)
             print(Fore.YELLOW + Style.BRIGHT + 
-                  "   GUÍA DE VALIDACIÓN (Vulnerabilidad vs. Falso Positivo)")
+                  "   GUÍA DE VALIDACIÓN (Exposición Segura vs. Vulnerabilidad)")
             print(Fore.YELLOW + "  " + "=" * 66)
             print("  Un nonce expuesto no siempre es explotable. Siga estos pasos para")
             print("  determinar si el hallazgo representa una vulnerabilidad real:")
@@ -226,7 +226,7 @@ def _emit_report(report: ScannerReport, fmt: str) -> None:
             print(f"     - {Fore.RED}{Style.BRIGHT}Vulnerabilidad Real (Bypass):{Fore.RESET} La acción es de tipo administrativa/sensible")
             print("       (ej. borrar posts, editar perfiles) y el servidor la ejecuta")
             print("       con éxito (200 OK, success:true) sin requerir autenticación.")
-            print(f"     - {Fore.GREEN}{Style.BRIGHT}Exposición Segura (Falso Positivo):{Fore.RESET} La acción es administrativa")
+            print(f"     - {Fore.GREEN}{Style.BRIGHT}Exposición Segura (Uso Inocuo):{Fore.RESET} La acción es administrativa")
             print("       pero el servidor valida privilegios y la rechaza (403/401),")
             print("       O BIEN la acción es pública por diseño (ej. cargar imágenes")
             print("       de galería o paginar posts públicos).")
